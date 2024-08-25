@@ -1,0 +1,8 @@
+.video_container {
+    opacity: 0;
+    transition: opacity 0.5s ease-out 0.5s;
+}
+
+.visible_video {
+    opacity: 1;
+}
