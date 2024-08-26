@@ -3,6 +3,8 @@ import logo_small from "../../assets/imgs/logo.png";
 import title_img from "../../assets/imgs/title.png";
 import Video from "../Video";
 
+import introVide from "../../assets/vids/intro.mp4";
+
 import blendVideoFrameToBg from "../../assets/imgs/blend_video_frame_to_bg.png";
 import blendVideoFrameBottom from "../../assets/imgs/video_cover_blend_down.png";
 
@@ -62,7 +64,7 @@ export default function Hero() {
       <div className="absolute top-0 bottom-0  left-0 right-0  bg-blue_dark flex z-10 pt-[65px]  video_container_wrapper visible_video_wrapper">
         <div className="flex flex-col w-full z-10 relative  flex-grow ">
           <div className="relative">
-            <Video />
+            <Video src={introVide} />
             <img
               src={blendVideoFrameBottom}
               alt="blend"
@@ -71,13 +73,14 @@ export default function Hero() {
           </div>
 
           <img src={blendVideoFrameToBg} alt="blend" className="relative z-0" />
+          
           <div className=" w-full relative flex">
             <div className="w-[362px] h-[110px] sm:w-[450px] sm:h-[137px] mx-auto -mt-28">
               <img src={title_img} alt="title_logo" />
             </div>
           </div>
 
-          <div className="relative w-full h-auto flex flex-grow">
+          <div className="relative w-full h-auto flex flex-grow overflow-hidden">
             <img
               className="absolute bottom-0"
               src={grassBottom}
@@ -102,8 +105,8 @@ export default function Hero() {
               ></img>
             </div>
 
-            <div className="w-[276px] h-[268px] sm:w-[350px] sm:h-[340px] mx-auto mt-10 sm:mt-0">
-              <img src={coin} className="max-w-full max-h-full" />
+            <div className="w-[276px] h-[268px] sm:w-[350px] sm:h-[340px] mx-auto">
+              <img src={coin} className="max-w-full max-h-full mt-8" />
             </div>
           </div>
         </div>

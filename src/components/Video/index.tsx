@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import introVideo from "../../assets/vids/intro.mp4";
-
 import playBtnIcon from "../../assets/svgs/play.svg";
 import pauseBtnIcon from "../../assets/svgs/pause.svg";
 
@@ -12,7 +11,8 @@ function updateCssVariable() {
 }
 
 function intersectionCallbackHandler(
-  videoElement: HTMLVideoElement
+  videoElement: HTMLVideoElement,
+  src: string
   //   setLoaded: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   const intersectionCallback: IntersectionObserverCallback = function (
@@ -22,11 +22,8 @@ function intersectionCallbackHandler(
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const videoElement = entry.target as HTMLVideoElement;
-        //   videoElement.poster = hero_bg_small;
-        videoElement.src = introVideo;
+        videoElement.src = src;
         videoElement.load();
-
-        //setLoaded(true);
         observer.unobserve(entry.target);
         observer.disconnect();
       }
@@ -40,28 +37,34 @@ function intersectionCallbackHandler(
   return observer;
 }
 
-function initializeVideo() {
+function initializeVideo(src: string) {
   const videoElement: HTMLVideoElement | null = document.getElementById(
     "vid_k"
   ) as HTMLVideoElement;
+
+  console.log(videoElement);
   if (!videoElement) return;
-  intersectionCallbackHandler(videoElement);
+  intersectionCallbackHandler(videoElement, src);
 }
 
-export default function Video() {
+export default function Video({ src = introVideo }: { src: string }) {
   const [isPlaying, setPlaying] = useState(true);
   const refDiv = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    window.addEventListener("load", initializeVideo);
+    const executor = function () {
+      initializeVideo(src);
+    };
+    window.addEventListener("load", executor);
     return () => {
-      window.removeEventListener("load", initializeVideo);
+      window.removeEventListener("load", executor);
     };
   }, []);
 
   function mediaPlay() {
     const videoElement = ref.current;
+    console.log("456", videoElement);
     if (!videoElement) return;
     if (videoElement.paused) {
       videoElement.play();
@@ -75,6 +78,7 @@ export default function Video() {
   function playVideo(e: React.SyntheticEvent<HTMLVideoElement, Event>) {
     const videoElement = ref.current;
     const container = refDiv.current;
+
     if (videoElement && container) {
       videoElement.play();
       updateCssVariable();
@@ -83,28 +87,32 @@ export default function Video() {
   }
 
   return (
-    <div className=" h-auto w-full relative z-0 video_container" ref={refDiv}>
-      <div className="h-[40px]  rounded-md absolute left-0 right-0 top-0 flex flex-row justify-end px-5 items-center">
+    <div className="video_container flex-col  w-full relative" ref={refDiv}>
+      <div className="h-[40px] sm:h-[60px] rounded-md absolute left-0 right-0 top-0 flex flex-row justify-end px-5 items-center">
         <div
-          className="w-[30px] h-[30px] bg-blue_dark rounded-sm absolute cursor-pointer media_play_btn flex items-center justify-center opacity-80"
+          className="w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] bg-blue_dark rounded-sm absolute cursor-pointer media_play_btn flex items-center justify-center opacity-80"
           onClick={mediaPlay}
         >
           {isPlaying && <img src={playBtnIcon} alt="play_button" />}
           {!isPlaying && <img src={pauseBtnIcon} alt="pause_button" />}
         </div>
       </div>
-      <video
-        id="vid_k"
-        ref={ref}
-        muted={true}
-        loop={true}
-        preload="none"
-        controlsList="none"
-        onContextMenu={(e) => {
-          e.preventDefault();
-        }}
-        onCanPlayThrough={playVideo}
-      ></video>
+      <div className="flex w-full">
+        <video
+          className="object-cover w-full h-[calc(4*(100vw/8))] sm:h-[calc(4*(100vw/8))] lg:h-lvh"
+          id="vid_k"
+          ref={ref}
+          poster={playBtnIcon}
+          muted={true}
+          loop={true}
+          preload="none"
+          controlsList="none"
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
+          onCanPlayThrough={playVideo}
+        />
+      </div>
     </div>
   );
 }
