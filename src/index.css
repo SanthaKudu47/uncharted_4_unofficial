@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* custom */
+
+.media_play_btn {
+    @apply border hover:border-solid border-white_v1;
+}
