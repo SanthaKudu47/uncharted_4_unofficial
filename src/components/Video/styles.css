@@ -1,8 +1,8 @@
-.video_container {
+.video_container_wrapper {
     opacity: 0;
-    transition: opacity 0.5s ease-out 0.5s;
+    transition: opacity 0.5s ease-out 0s;
 }
 
-.visible_video {
-    opacity: 1;
+.visible_video_wrapper {
+    opacity: calc(var(--op));
 }

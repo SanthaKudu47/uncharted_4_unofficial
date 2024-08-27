@@ -3,11 +3,13 @@ import introVideo from "../../assets/vids/intro.mp4";
 import playBtnIcon from "../../assets/svgs/play.svg";
 import pauseBtnIcon from "../../assets/svgs/pause.svg";
 
+import poster from "../../assets/imgs/poster_large.png";
+
 import "./styles.css";
 
 function updateCssVariable() {
   const root = document.documentElement;
-  root.style.setProperty("--video_container_op", "1");
+  root.style.setProperty(`--op`, "1");
 }
 
 function intersectionCallbackHandler(
@@ -41,13 +43,11 @@ function initializeVideo(src: string) {
   const videoElement: HTMLVideoElement | null = document.getElementById(
     "vid_k"
   ) as HTMLVideoElement;
-
-  console.log(videoElement);
   if (!videoElement) return;
   intersectionCallbackHandler(videoElement, src);
 }
 
-export default function Video({ src = introVideo }: { src: string }) {
+export default function Video({ src = introVideo}: { src: string; }) {
   const [isPlaying, setPlaying] = useState(true);
   const refDiv = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
@@ -57,8 +57,12 @@ export default function Video({ src = introVideo }: { src: string }) {
       initializeVideo(src);
     };
     window.addEventListener("load", executor);
+    // const rootElement = document.documentElement;
+    // rootElement.style.setProperty(`--op`, "0");
+
     return () => {
       window.removeEventListener("load", executor);
+      // rootElement.style.removeProperty(`--op`);
     };
   }, []);
 
@@ -82,7 +86,7 @@ export default function Video({ src = introVideo }: { src: string }) {
     if (videoElement && container) {
       videoElement.play();
       updateCssVariable();
-      container.classList.add("visible_video");
+      container.classList.add("visible_video_wrapper");
     }
   }
 
@@ -100,9 +104,9 @@ export default function Video({ src = introVideo }: { src: string }) {
       <div className="flex w-full">
         <video
           className="object-cover w-full h-[calc(4*(100vw/8))] sm:h-[calc(4*(100vw/8))] lg:h-lvh"
-          id="vid_k"
+          id={"vid_k"}
           ref={ref}
-          poster={playBtnIcon}
+          poster={poster}
           muted={true}
           loop={true}
           preload="none"
