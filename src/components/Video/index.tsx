@@ -79,7 +79,7 @@ export default function Video({ src = introVideo}: { src: string; }) {
     }
   }
 
-  function playVideo(e: React.SyntheticEvent<HTMLVideoElement, Event>) {
+  function playVideo(_e: React.SyntheticEvent<HTMLVideoElement, Event>) {
     const videoElement = ref.current;
     const container = refDiv.current;
 
