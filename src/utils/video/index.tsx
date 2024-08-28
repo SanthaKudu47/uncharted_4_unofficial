@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 function updateCssVariable() {
   const root = document.documentElement;
   root.style.setProperty(`--op`, "1");
@@ -55,7 +53,7 @@ function attachVideo(
 
   const button = buttonWrapper.firstChild as HTMLDivElement;
 
-  button.onclick = function (this: GlobalEventHandlers, ev: MouseEvent) {
+  button.onclick = function (this: GlobalEventHandlers, _ev: MouseEvent) {
     if (videoElement.paused) {
       dispatch(true);
       videoElement.play();
@@ -68,4 +66,4 @@ function attachVideo(
   // poster={poster}
 }
 
-export { attachVideo,updateCssVariable };
+export { attachVideo, updateCssVariable };

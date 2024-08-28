@@ -3,14 +3,7 @@ import introVideo from "../../assets/vids/intro.mp4";
 import playBtnIcon from "../../assets/svgs/play.svg";
 import pauseBtnIcon from "../../assets/svgs/pause.svg";
 
-import poster from "../../assets/imgs/poster_large.png";
-
 import "./styles.css";
-
-function updateCssVariable() {
-  const root = document.documentElement;
-  root.style.setProperty(`--op`, "1");
-}
 
 function intersectionCallbackHandler(
   videoElement: HTMLVideoElement,
@@ -78,18 +71,6 @@ export default function Video({ src = introVideo }: { src: string }) {
     } else {
       videoElement.pause();
       setPlaying(false);
-    }
-  }
-
-  function playVideo(_e: React.SyntheticEvent<HTMLVideoElement, Event>) {
-    console.log("play video");
-    const videoElement = ref.current;
-    const container = refDiv.current;
-
-    if (videoElement && container) {
-      videoElement.play();
-      updateCssVariable();
-      container.classList.add("visible_video_wrapper");
     }
   }
 
