@@ -46,10 +46,9 @@ export default function HeroLarge() {
     const executor = function () {
       attachVideo(introVideo, setPlaying, updateCssVariable);
     };
-    window.addEventListener("load", executor);
-    return () => {
-      window.addEventListener("load", executor);
-    };
+    if (document.readyState === "complete") {
+      executor();
+    }
   }, []);
   return (
     <>
