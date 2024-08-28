@@ -26,7 +26,10 @@ function attachVideo(
     "sm:h-[calc(4*(100vw/8))]",
     "lg:h-lvh"
   );
+  videoElement.preload = "auto";
+  videoElement.playsInline = true;
   videoElement.autoplay = true;
+  videoElement.defaultMuted = true;
   videoElement.poster = placeHolder.src;
   videoElement.loop = true;
   videoElement.src = introVideo;
