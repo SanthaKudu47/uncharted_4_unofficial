@@ -47,13 +47,15 @@ function initializeVideo(src: string) {
   intersectionCallbackHandler(videoElement, src);
 }
 
-export default function Video({ src = introVideo}: { src: string; }) {
+export default function Video({ src = introVideo }: { src: string }) {
   const [isPlaying, setPlaying] = useState(true);
   const refDiv = useRef<HTMLDivElement>(null);
   const ref = useRef<HTMLVideoElement>(null);
+  const wrapper = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const executor = function () {
+      console.log("exec");
       initializeVideo(src);
     };
     window.addEventListener("load", executor);
@@ -68,7 +70,7 @@ export default function Video({ src = introVideo}: { src: string; }) {
 
   function mediaPlay() {
     const videoElement = ref.current;
-    console.log("456", videoElement);
+
     if (!videoElement) return;
     if (videoElement.paused) {
       videoElement.play();
@@ -80,6 +82,7 @@ export default function Video({ src = introVideo}: { src: string; }) {
   }
 
   function playVideo(_e: React.SyntheticEvent<HTMLVideoElement, Event>) {
+    console.log("play video");
     const videoElement = ref.current;
     const container = refDiv.current;
 
@@ -101,8 +104,8 @@ export default function Video({ src = introVideo}: { src: string; }) {
           {!isPlaying && <img src={pauseBtnIcon} alt="pause_button" />}
         </div>
       </div>
-      <div className="flex w-full">
-        <video
+      <div className="flex w-full" ref={wrapper} id={"wrapper"}>
+        {/* <video
           className="object-cover w-full h-[calc(4*(100vw/8))] sm:h-[calc(4*(100vw/8))] lg:h-lvh"
           id={"vid_k"}
           ref={ref}
@@ -110,12 +113,14 @@ export default function Video({ src = introVideo}: { src: string; }) {
           muted={true}
           loop={true}
           preload="none"
-          controlsList="none"
+          autoPlay={true}
+          controls={false}
+          src={"src"}
           onContextMenu={(e) => {
             e.preventDefault();
           }}
           onCanPlayThrough={playVideo}
-        />
+        /> */}
       </div>
     </div>
   );
