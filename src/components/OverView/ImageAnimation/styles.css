@@ -1,0 +1,11 @@
+.gray_image_overlay {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s;
+}
+
+.gray_image_overlay_appear {
+    width: calc(100% - var(--pr)*1%);
+}
