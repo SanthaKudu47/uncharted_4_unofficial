@@ -1,6 +1,3 @@
-import { useRef } from "react";
-import useInView from "../../hooks/useInView";
-
 import "./styles.css";
 
 export default function SectionTitle({
