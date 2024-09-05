@@ -19,8 +19,6 @@ function scrollPositionCal(_event: Event, distanceToTopOfContainer: number) {
 
   let imageContainerHeight = imageContainer?.offsetHeight;
 
-  console.log(imageContainer);
-
   if (distanceToTopOfContainer == undefined || !imageContainerHeight) return;
   const margin = imageContainerHeight;
   const distanceToTopOfContainerWithMargin = distanceToTopOfContainer - margin;
@@ -35,14 +33,12 @@ function scrollPositionCal(_event: Event, distanceToTopOfContainer: number) {
   const isBefore = scrollTop - distanceToTopOfContainerWithMargin < 0;
   const isAfter = scrollTop >= distanceToTopOfContainer;
 
-  console.log(distanceToTopOfContainerWithMargin);
-
   if (isBefore) {
     root.style.setProperty("--pr", "0");
   }
 
   if (0 <= passedPercentage && passedPercentage <= 100) {
-    console.log('in area');
+   
     const newV = passedPercentage;
     if (scrollDirection === "up") {
       if (newV > value) {
@@ -65,7 +61,6 @@ function scrollPositionCal(_event: Event, distanceToTopOfContainer: number) {
 }
 
 function scrollHandler(_ev: Event, distanceToTopOfContainer: number) {
-  
   if (isRunning === true) {
     return;
   } else {

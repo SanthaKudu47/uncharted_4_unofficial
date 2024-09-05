@@ -72,7 +72,6 @@ export default function useInView(
 
   useEffect(() => {
     if (!targetRef.current) return;
-    console.log("Running Effect On Hook....");
     const clearObserver = IntObserverWrapper(setInView, targetRef.current, {
       threshold: options?.threshold ? options.threshold : "1/2",
       once: options?.once,

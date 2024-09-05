@@ -21,7 +21,7 @@ export default function OverViewSmall() {
           colorImageSrc={colorImage}
           size="sm"
         />
-        <div className="h-[1500px] px-5 relative">
+        <div className="h-auto px-5 relative">
           <div className="mb-10 mt-16" ref={refTitleText}>
             <SectionTitle title="OVERVIEW" isInView={isTextInView} />
           </div>

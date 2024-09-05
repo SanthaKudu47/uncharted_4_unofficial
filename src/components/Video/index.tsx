@@ -48,7 +48,6 @@ export default function Video({ src = introVideo }: { src: string }) {
 
   useEffect(() => {
     const executor = function () {
-      console.log("exec");
       initializeVideo(src);
     };
     window.addEventListener("load", executor);

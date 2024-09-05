@@ -13,7 +13,6 @@ export default function OverView() {
   const [screen, setScreen] = useState<"sm" | "lg">(getCurrentWindowSize());
   const resizeHandler = () => {
     if (lastScreen !== getCurrentWindowSize()) {
-      console.log("switch");
       setScreen(getCurrentWindowSize());
       lastScreen = getCurrentWindowSize();
     }
