@@ -1,0 +1,11 @@
+.section_header {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.3s ease-in 0.2s, transform 0.5s ease-in 0s;
+
+}
+
+.section_header_activate {
+    opacity: 1;
+    transform: translateY(0px);
+}

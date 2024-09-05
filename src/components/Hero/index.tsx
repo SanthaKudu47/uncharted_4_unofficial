@@ -31,5 +31,6 @@ export default function Hero() {
       setScreen(true);
     }
   }
+  //
   return <>{isLargeScreen ? <HeroLarge /> : <HeroSmall />}</>;
 }

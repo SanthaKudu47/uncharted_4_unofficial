@@ -1,6 +1,7 @@
 import introVideo from "../../assets/vids/intro.mp4";
 
 import downShade from "../../assets/imgs/shade_down.png";
+import blendVideoFromBottom from "../../assets/imgs/blend_video_frame_to_bg.png";
 import titleLarge from "../../assets/imgs/title_large.png";
 import { useEffect, useState } from "react";
 import placeHolder from "../../assets/imgs/poster_small.png";
@@ -46,9 +47,10 @@ export default function HeroLarge() {
     const executor = function () {
       attachVideo(introVideo, setPlaying, updateCssVariable);
     };
-    if (document.readyState === "complete") {
-      executor();
-    }
+    // if (document.readyState === "complete") {
+    //   executor();
+    // }
+    executor();
   }, []);
   return (
     <>
@@ -76,20 +78,14 @@ export default function HeroLarge() {
             width={"100%"}
             id="place_holder"
           />
-          {/* <img
-              src={blendVideoFrameBottom}
-              alt="blend"
-              className="absolute bottom-0 w-full"
-            /> */}
+          <img
+            src={blendVideoFromBottom}
+            alt="blend"
+            className="absolute top-0 w-full"
+          />
         </div>
         <div className="absolute bottom-[60px] left-0 right-0 z-10">
-          <img
-            src={downShade}
-            alt="down_shade"
-            height={"100%"}
-            width={"100%"}
-            className="h-[300px]"
-          />
+          <img src={downShade} alt="down_shade" width={'100%'} height={'100%'} />
         </div>
         <div className="video_container_wrapper_large visible_video_wrapper_large">
           <Title />

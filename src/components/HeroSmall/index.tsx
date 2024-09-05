@@ -48,9 +48,10 @@ export default function HeroSmall() {
     const executor = function () {
       attachVideo(introVideo, setPlaying, updateCssVariable);
     };
-    if (document.readyState === "complete") {
-      executor();
-    }
+    // if (document.readyState === "complete") {
+    //   executor();
+    // }
+    executor();
   }, []);
   return (
     <div className="w-full h-screen bg-blue_dark  relative z-0">
