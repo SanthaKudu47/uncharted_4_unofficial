@@ -1,89 +1,62 @@
-import { useEffect, useState } from "react";
-import p1card1 from "../../assets/imgs/p1c1.png";
-import Base from "./Base";
-
+import { useState } from "react";
 import "./styles.css";
 import { P1Card } from "./p1Card";
 import { PirateSymbol, SwardSymbol } from "./cardImages";
 import { InnerC1, InnerC2 } from "./p1CardInner";
-import PuzzleTwo from "./PuzzleTwo";
 import UnfoldCards from "./UnFoldCards";
+import Quiz from "./PuzzleBase/POne";
+import {
+  pZeroMatchingStatus,
+  pOneMatchingStatus,
+  Puzzles,
+  PuzzleWinStatus,
+} from "./PuzzleBase/types";
+import CardOne from "./PuzzleBase/Card1";
+import CardTwo from "./PuzzleBase/Card2";
+import CardThree from "./PuzzleBase/Card3";
 
-type puzzleOneMatchingStatus = {
-  card1: number;
-  card2: number;
-};
-
-type puzzleTwoMatchingStatus = {
-  card1: number;
-  card2: number;
-  card3: number;
-};
-type PuzzleWinStatus = {
-  puzzleOne: boolean;
-  puzzleTwo: boolean;
-  puzzleThree: boolean;
-  puzzleFour: boolean;
-
-  total: number;
-};
-type Puzzles = {
-  puzzleOne: {
-    card1: number;
-    card2: number;
-  };
-  puzzleTwo: {
-    card1: number;
-    card2: number;
-    card3: number;
-  };
-};
-
-const puzzleOneMatchingStatus: puzzleOneMatchingStatus = { card1: 4, card2: 2 };
-const puzzleTwoMatchingStatus: puzzleTwoMatchingStatus = {
+const puzzleZeroMatchingStatus: pZeroMatchingStatus = { card1: 4, card2: 2 }; //this is for base 2 card quiz
+const puzzleOneMatchingStatus: pOneMatchingStatus = {
   card1: 4,
   card2: 2,
   card3: 2,
 };
 
-function isPuzzleOneMatching(
-  puzzleOneMatchingStatus: puzzleOneMatchingStatus,
+function isPuzzleZeroMatching(
+  puzzleZeroMatchingStatus: pZeroMatchingStatus,
   currentStatus: {
     card1: number;
     card2: number;
   }
 ) {
   return (
-    puzzleOneMatchingStatus.card1 === currentStatus.card1 &&
-    puzzleOneMatchingStatus.card2 === currentStatus.card2
+    puzzleZeroMatchingStatus.card1 === currentStatus.card1 &&
+    puzzleZeroMatchingStatus.card2 === currentStatus.card2
   );
 }
 
-function isPuzzleTwoMatching(
-  puzzleTwoMatchingStatus: puzzleTwoMatchingStatus,
-  currentStatus: puzzleTwoMatchingStatus
+function isPuzzleOneMatching(
+  puzzleOneMatchingStatus: pOneMatchingStatus,
+  currentStatus: pOneMatchingStatus
 ) {
   return (
-    puzzleTwoMatchingStatus.card1 === currentStatus.card1 &&
-    puzzleTwoMatchingStatus.card2 === currentStatus.card2 &&
-    puzzleTwoMatchingStatus.card3 === currentStatus.card3
+    puzzleOneMatchingStatus.card1 === currentStatus.card1 &&
+    puzzleOneMatchingStatus.card2 === currentStatus.card2 &&
+    puzzleOneMatchingStatus.card3 === currentStatus.card3
   );
 }
 
 const initialState: Puzzles = {
-  puzzleOne: {
+  puzzleZero: {
     card1: 1,
     card2: 1,
   },
-  puzzleTwo: {
+  puzzleOne: {
     card1: 1,
     card2: 1,
     card3: 1,
   },
 };
-
-let isPuzzleOneWon = false;
-let isPuzzleTwoWon = false;
 
 export default function Puzzle() {
   const [unfoldCardRotationStatus, setUnfoldCardRotationStatus] = useState(0);
@@ -91,50 +64,50 @@ export default function Puzzle() {
   const [puzzles, setPuzzleStatus] = useState<Puzzles>(initialState);
 
   const [puzzleWinStatus, setPuzzleWinStatus] = useState<PuzzleWinStatus>({
+    puzzleZero: false,
     puzzleOne: false,
-    puzzleFour: false,
     puzzleThree: false,
     puzzleTwo: false,
     total: 0,
   });
 
-  const isPuzzleDone = isPuzzleOneMatching(
+  const isPuzzleDone = isPuzzleZeroMatching(
+    puzzleZeroMatchingStatus,
+    puzzles.puzzleZero
+  );
+  const isPuzzleOneCardsAreMatching = isPuzzleOneMatching(
     puzzleOneMatchingStatus,
     puzzles.puzzleOne
-  );
-  const isPuzzleTwoCardsAreMatching = isPuzzleTwoMatching(
-    puzzleTwoMatchingStatus,
-    puzzles.puzzleTwo
   );
   const zoomHandler = function () {
     setZoomStatus(isZoomed === true ? false : true);
   };
 
-  const puzzleOneCardHandler = function (cardId: "card1" | "card2") {
+  const puzzleZeroCardHandler = function (cardId: "card1" | "card2") {
+    const puzzleZero = puzzles.puzzleZero;
+    const currentCardRotationStatus = puzzleZero[cardId];
+    const nextStep =
+      currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
+    const updatedStatus = {
+      puzzleZero: { ...puzzles.puzzleZero },
+      puzzleOne: { ...puzzles.puzzleOne },
+    };
+    updatedStatus.puzzleZero[cardId] = nextStep;
+    setPuzzleStatus(updatedStatus);
+  };
+
+  const puzzleOneCardHandler = function (cardId: "card1" | "card2" | "card3") {
     const puzzleOne = puzzles.puzzleOne;
     const currentCardRotationStatus = puzzleOne[cardId];
     const nextStep =
       currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
+
     const updatedStatus = {
+      puzzleZero: { ...puzzles.puzzleZero },
       puzzleOne: { ...puzzles.puzzleOne },
-      puzzleTwo: { ...puzzles.puzzleTwo },
     };
+
     updatedStatus.puzzleOne[cardId] = nextStep;
-    setPuzzleStatus(updatedStatus);
-  };
-
-  const puzzleTwoCardHandler = function (cardId: "card1" | "card2" | "card3") {
-    const puzzleTwo = puzzles.puzzleTwo;
-    const currentCardRotationStatus = puzzleTwo[cardId];
-    const nextStep =
-      currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
-
-    const updatedStatus = {
-      puzzleOne: { ...puzzles.puzzleOne },
-      puzzleTwo: { ...puzzles.puzzleTwo },
-    };
-
-    updatedStatus.puzzleTwo[cardId] = nextStep;
     setPuzzleStatus(updatedStatus);
   };
 
@@ -142,30 +115,30 @@ export default function Puzzle() {
     setZoomStatus(false);
   }
 
-  function updatePuzzleOneWin() {
+  function updatePuzzleZeroWin() {
     setPuzzleWinStatus({
       ...puzzleWinStatus,
-      puzzleOne: true,
+      puzzleZero: true,
       total: 1,
     });
   }
   function updatePuzzleTwoWin() {
     setPuzzleWinStatus({
       ...puzzleWinStatus,
+      puzzleZero: true,
       puzzleOne: true,
-      puzzleTwo: true,
       total: 2,
     });
   }
 
-  const runAfterPuzzleOneMatchFound = function () {
+  const runAfterPuzzleZeroMatchFound = function () {
     setTimeout(() => {
       zoomOut();
-      updatePuzzleOneWin();
+      updatePuzzleZeroWin();
     }, 500);
   };
 
-  const runAfterPuzzleTwoMatchFound = function () {
+  const runAfterPuzzleOneMatchFound = function () {
     setTimeout(() => {
       zoomOut();
       updatePuzzleTwoWin();
@@ -176,21 +149,10 @@ export default function Puzzle() {
     setUnfoldCardRotationStatus((last) => last + 1);
   };
 
-  const initiatePuzzleThree = function () {
-    
-  };
-
-  const puzzleTwoSteps: "left" | "middle" | "right" =
+  const puzzleOneSteps: "left" | "middle" | "right" =
     unfoldCardRotationStatus === 0
       ? "left"
       : unfoldCardRotationStatus === 1
-      ? "middle"
-      : "right";
-
-  const puzzleThreeSteps: "left" | "middle" | "right" =
-    unfoldCardRotationStatus === 3
-      ? "left"
-      : unfoldCardRotationStatus === 4
       ? "middle"
       : "right";
 
@@ -253,9 +215,9 @@ export default function Puzzle() {
               <P1Card
                 isPuzzleDone={isPuzzleDone}
                 setDirectionStatus={() => {
-                  puzzleOneCardHandler("card1");
+                  puzzleZeroCardHandler("card1");
                 }}
-                runAfterPuzzleOneMatchFound={runAfterPuzzleOneMatchFound}
+                runAfterPuzzleOneMatchFound={runAfterPuzzleZeroMatchFound}
                 ImageCmp={<PirateSymbol />}
                 InnerCmp={<InnerC1 />}
                 id="p1_card_1"
@@ -263,9 +225,9 @@ export default function Puzzle() {
               <P1Card
                 isPuzzleDone={isPuzzleDone}
                 setDirectionStatus={() => {
-                  puzzleOneCardHandler("card2");
+                  puzzleZeroCardHandler("card2");
                 }}
-                runAfterPuzzleOneMatchFound={runAfterPuzzleOneMatchFound}
+                runAfterPuzzleOneMatchFound={runAfterPuzzleZeroMatchFound}
                 ImageCmp={<SwardSymbol />}
                 InnerCmp={<InnerC2 />}
                 id="p1_card_2"
@@ -298,13 +260,14 @@ export default function Puzzle() {
                 runAfterAnimation={unfoldCardsAnimationEndEventHandler}
               />
 
-              <PuzzleTwo
-                step={puzzleTwoSteps}
-                isPuzzleTwoCardsAreMatching={isPuzzleTwoCardsAreMatching}
-                runAfterPuzzleTwoMatchFound={runAfterPuzzleTwoMatchFound}
-                setDirectionStatus={puzzleTwoCardHandler}
-                allDoneCaller={initiatePuzzleThree}
+              <Quiz
+                step={puzzleOneSteps}
+                isPuzzleOneCardsAreMatching={isPuzzleOneCardsAreMatching}
+                runAfterPuzzleOneMatchFound={runAfterPuzzleOneMatchFound}
+                setDirectionStatus={puzzleOneCardHandler}
+                cards={[<CardOne />, <CardTwo />, <CardThree />]}
               />
+
               <g id="covers">
                 <g id="left">
                   <path
