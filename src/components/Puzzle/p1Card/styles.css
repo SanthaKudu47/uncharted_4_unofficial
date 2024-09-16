@@ -1,0 +1,17 @@
+.p1_card {
+    transform: rotate(0deg);
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 0.5s ease-in 0s;
+}
+
+
+
+.card_rotate {
+    transform: rotate(var(--cardRotation)),translateX(0);
+}
+
+.move_card_right {
+    transform: rotate(var(--cardRotation)),translateX(100);
+    
+}

@@ -3,6 +3,7 @@ import Characters from "./components/Characters";
 
 import Hero from "./components/Hero";
 import OverView from "./components/OverView";
+import Puzzle from "./components/Puzzle";
 import Title from "./components/Title";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <OverView />
       <Title title="MEET THE CHARACTERS" />
       <Characters />
+      <Puzzle/>
     </>
   );
 }

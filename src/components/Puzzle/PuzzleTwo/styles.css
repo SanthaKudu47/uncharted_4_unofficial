@@ -1,0 +1,17 @@
+.puzzle_2_wrapper {
+    position: relative;
+    transition: transform 1s ease-out 0.1s;
+
+}
+
+.before {
+    transform: translateX(-1300px);
+}
+
+.init {
+    transform: translateX(0px);
+}
+
+.after {
+    transform: translateX(1300px);
+}

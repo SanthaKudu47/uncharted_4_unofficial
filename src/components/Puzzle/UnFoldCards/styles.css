@@ -1,0 +1,25 @@
+.unfold_cards {
+    transform: rotate(0);
+    transform-origin: center;
+    transition: transform 1s ease-out 0s;
+}
+
+.rotate_r1 {
+    transform-origin: center;
+    transform: rotate(-180deg);
+}
+
+.rotate_r2 {
+    transform-origin: center;
+    transform: rotate(-360deg);
+}
+
+.rotate_r3 {
+    transform-origin: center;
+    transform: rotate(-540deg);
+}
+
+.rotate_r4 {
+    transform-origin: center;
+    transform: rotate(-720deg);
+}
