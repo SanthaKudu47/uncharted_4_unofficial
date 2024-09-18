@@ -4,22 +4,43 @@ import { P1Card } from "./p1Card";
 import { PirateSymbol, SwardSymbol } from "./cardImages";
 import { InnerC1, InnerC2 } from "./p1CardInner";
 import UnfoldCards from "./UnFoldCards";
-import Quiz from "./PuzzleBase/POne";
+import Quiz from "./PuzzleBase/quiz";
 import {
   pZeroMatchingStatus,
-  pOneMatchingStatus,
   Puzzles,
   PuzzleWinStatus,
+  cardThreeMatchingStatus,
+  cardFourMatchingStatus,
+  cardIdType,
 } from "./PuzzleBase/types";
 import CardOne from "./PuzzleBase/Card1";
 import CardTwo from "./PuzzleBase/Card2";
 import CardThree from "./PuzzleBase/Card3";
+import CardFour from "./PuzzleBase/Card4";
+import CardFive from "./PuzzleBase/Card5";
+import CardSix from "./PuzzleBase/Card6";
+import CardSeven from "./PuzzleBase/Card7";
+import CardEight from "./PuzzleBase/Card8";
+import CardNine from "./PuzzleBase/Card9";
+import CardTen from "./PuzzleBase/Card10";
 
 const puzzleZeroMatchingStatus: pZeroMatchingStatus = { card1: 4, card2: 2 }; //this is for base 2 card quiz
-const puzzleOneMatchingStatus: pOneMatchingStatus = {
+const puzzleOneMatchingStatus: cardThreeMatchingStatus = {
   card1: 4,
   card2: 2,
   card3: 2,
+};
+const puzzleTwoMatchingStatus: cardThreeMatchingStatus = {
+  card1: 2,
+  card2: 4,
+  card3: 3,
+};
+
+const puzzleThreeMatchingStatus: cardFourMatchingStatus = {
+  card1: 1,
+  card2: 4,
+  card3: 3,
+  card4: 2,
 };
 
 function isPuzzleZeroMatching(
@@ -35,14 +56,26 @@ function isPuzzleZeroMatching(
   );
 }
 
-function isPuzzleOneMatching(
-  puzzleOneMatchingStatus: pOneMatchingStatus,
-  currentStatus: pOneMatchingStatus
+function isThreeCardPuzzleMatching(
+  puzzleMatchingStatus: cardThreeMatchingStatus,
+  currentStatus: cardThreeMatchingStatus
 ) {
   return (
-    puzzleOneMatchingStatus.card1 === currentStatus.card1 &&
-    puzzleOneMatchingStatus.card2 === currentStatus.card2 &&
-    puzzleOneMatchingStatus.card3 === currentStatus.card3
+    puzzleMatchingStatus.card1 === currentStatus.card1 &&
+    puzzleMatchingStatus.card2 === currentStatus.card2 &&
+    puzzleMatchingStatus.card3 === currentStatus.card3
+  );
+}
+
+function isFourCardPuzzleMatching(
+  puzzleMatchingStatus: cardFourMatchingStatus,
+  currentStatus: cardFourMatchingStatus
+) {
+  return (
+    puzzleMatchingStatus.card1 === currentStatus.card1 &&
+    puzzleMatchingStatus.card2 === currentStatus.card2 &&
+    puzzleMatchingStatus.card3 === currentStatus.card3 &&
+    puzzleMatchingStatus.card4 === currentStatus.card4
   );
 }
 
@@ -56,7 +89,56 @@ const initialState: Puzzles = {
     card2: 1,
     card3: 1,
   },
+  puzzleTwo: {
+    card1: 1,
+    card2: 1,
+    card3: 1,
+  },
+  puzzleThree: {
+    card1: 1,
+    card2: 1,
+    card3: 1,
+    card4: 1,
+  },
 };
+
+function getPuzzleOneSteps(unfoldCardRotationStatus: number) {
+  switch (unfoldCardRotationStatus) {
+    case 0:
+      return "left";
+    case 1:
+      return "middle";
+    case 2:
+      return "right";
+  }
+  return "right";
+}
+function getPuzzleTwoSteps(unfoldCardRotationStatus: number) {
+  switch (unfoldCardRotationStatus) {
+    case 0:
+    case 1:
+      return "left";
+    case 2:
+      return "middle";
+    case 3:
+      return "right";
+  }
+  return "right";
+}
+
+function getPuzzleThreeSteps(unfoldCardRotationStatus: number) {
+  switch (unfoldCardRotationStatus) {
+    case 0:
+    case 1:
+    case 2:
+      return "left";
+    case 3:
+      return "middle";
+    case 4:
+      return "right";
+  }
+  return "right";
+}
 
 export default function Puzzle() {
   const [unfoldCardRotationStatus, setUnfoldCardRotationStatus] = useState(0);
@@ -68,19 +150,39 @@ export default function Puzzle() {
     puzzleOne: false,
     puzzleThree: false,
     puzzleTwo: false,
-    total: 0,
   });
 
   const isPuzzleDone = isPuzzleZeroMatching(
     puzzleZeroMatchingStatus,
     puzzles.puzzleZero
   );
-  const isPuzzleOneCardsAreMatching = isPuzzleOneMatching(
+  const isPuzzleOneCardsAreMatching = isThreeCardPuzzleMatching(
     puzzleOneMatchingStatus,
     puzzles.puzzleOne
   );
+
+  const isPuzzleTwoCardsAreMatching = isThreeCardPuzzleMatching(
+    puzzleTwoMatchingStatus,
+    puzzles.puzzleTwo
+  );
+
+  const isPuzzleThreeCardsAreMatching = isFourCardPuzzleMatching(
+    puzzleThreeMatchingStatus,
+    puzzles.puzzleThree
+  );
   const zoomHandler = function () {
     setZoomStatus(isZoomed === true ? false : true);
+  };
+
+  const getUpdatedState = function (puzzles: Puzzles) {
+    const updatedStatus = {
+      puzzleZero: { ...puzzles.puzzleZero },
+      puzzleOne: { ...puzzles.puzzleOne },
+      puzzleTwo: { ...puzzles.puzzleTwo },
+      puzzleThree: { ...puzzles.puzzleThree },
+    };
+
+    return updatedStatus;
   };
 
   const puzzleZeroCardHandler = function (cardId: "card1" | "card2") {
@@ -88,26 +190,42 @@ export default function Puzzle() {
     const currentCardRotationStatus = puzzleZero[cardId];
     const nextStep =
       currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
-    const updatedStatus = {
-      puzzleZero: { ...puzzles.puzzleZero },
-      puzzleOne: { ...puzzles.puzzleOne },
-    };
+    const updatedStatus = getUpdatedState(puzzles);
     updatedStatus.puzzleZero[cardId] = nextStep;
     setPuzzleStatus(updatedStatus);
   };
 
-  const puzzleOneCardHandler = function (cardId: "card1" | "card2" | "card3") {
+  const puzzleOneCardHandler = function (cardId: cardIdType) {
+    const crdId = cardId as "card1" | "card2" | "card3";
     const puzzleOne = puzzles.puzzleOne;
-    const currentCardRotationStatus = puzzleOne[cardId];
+    const currentCardRotationStatus = puzzleOne[crdId];
     const nextStep =
       currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
+    const updatedStatus = getUpdatedState(puzzles);
+    updatedStatus.puzzleOne[crdId] = nextStep;
+    setPuzzleStatus(updatedStatus);
+  };
 
-    const updatedStatus = {
-      puzzleZero: { ...puzzles.puzzleZero },
-      puzzleOne: { ...puzzles.puzzleOne },
-    };
+  const puzzleTwoCardHandler = function (cardId: cardIdType) {
+    const crdId = cardId as "card1" | "card2" | "card3";
+    const puzzleTwo = puzzles.puzzleTwo;
+    const currentCardRotationStatus = puzzleTwo[crdId];
+    const nextStep =
+      currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
+    const updatedStatus = getUpdatedState(puzzles);
+    updatedStatus.puzzleTwo[crdId] = nextStep;
+    setPuzzleStatus(updatedStatus);
+  };
 
-    updatedStatus.puzzleOne[cardId] = nextStep;
+  const puzzleThreeCardHandler = function (
+    cardId: cardIdType
+  ) {
+    const puzzleThree = puzzles.puzzleThree;
+    const currentCardRotationStatus = puzzleThree[cardId];
+    const nextStep =
+      currentCardRotationStatus === 4 ? 1 : currentCardRotationStatus + 1;
+    const updatedStatus = getUpdatedState(puzzles);
+    updatedStatus.puzzleThree[cardId] = nextStep;
     setPuzzleStatus(updatedStatus);
   };
 
@@ -119,15 +237,32 @@ export default function Puzzle() {
     setPuzzleWinStatus({
       ...puzzleWinStatus,
       puzzleZero: true,
-      total: 1,
     });
   }
+  function updatePuzzleOneWin() {
+    setPuzzleWinStatus({
+      ...puzzleWinStatus,
+      puzzleZero: true,
+      puzzleOne: true,
+    });
+  }
+
   function updatePuzzleTwoWin() {
     setPuzzleWinStatus({
       ...puzzleWinStatus,
       puzzleZero: true,
       puzzleOne: true,
-      total: 2,
+      puzzleTwo: true,
+    });
+  }
+
+  function updatePuzzleThreeWin() {
+    setPuzzleWinStatus({
+      ...puzzleWinStatus,
+      puzzleZero: true,
+      puzzleOne: true,
+      puzzleTwo: true,
+      puzzleThree: true,
     });
   }
 
@@ -135,33 +270,57 @@ export default function Puzzle() {
     setTimeout(() => {
       zoomOut();
       updatePuzzleZeroWin();
+      setUnfoldCardRotationStatus(1);
     }, 500);
   };
 
   const runAfterPuzzleOneMatchFound = function () {
     setTimeout(() => {
       zoomOut();
+      updatePuzzleOneWin();
+      setUnfoldCardRotationStatus(2);
+    }, 500);
+  };
+
+  const runAfterPuzzleTwoMatchFound = function () {
+    setTimeout(() => {
+      zoomOut();
       updatePuzzleTwoWin();
+      setUnfoldCardRotationStatus(3);
+    }, 500);
+  };
+
+  const runAfterPuzzleThreeMatchFound = function () {
+    setTimeout(() => {
+      zoomOut();
+      updatePuzzleThreeWin();
+      setUnfoldCardRotationStatus(4);
     }, 500);
   };
 
   const unfoldCardsAnimationEndEventHandler = function () {
-    setUnfoldCardRotationStatus((last) => last + 1);
+    // setUnfoldCardRotationStatus((last) => last + 1);
   };
 
-  const puzzleOneSteps: "left" | "middle" | "right" =
-    unfoldCardRotationStatus === 0
-      ? "left"
-      : unfoldCardRotationStatus === 1
-      ? "middle"
-      : "right";
+  const puzzleOneSteps = getPuzzleOneSteps(unfoldCardRotationStatus);
+  const puzzleTwoSteps = getPuzzleTwoSteps(unfoldCardRotationStatus);
+  const puzzleThreeSteps = getPuzzleThreeSteps(unfoldCardRotationStatus);
+
+  const isNormalZoom =
+    puzzleWinStatus.puzzleZero &&
+    puzzleWinStatus.puzzleOne &&
+    puzzleWinStatus.puzzleTwo
+      ? true
+      : false;
+
+  console.log("5555555", puzzles.puzzleThree, isPuzzleThreeCardsAreMatching);
 
   return (
     <div className="px-2 bg-blue_dark relative mx-auto flex justify-center">
       <div className="w-full h-auto overflow-hidden">
         <div
           className={`flex justify-center items-center view_port ${
-            isZoomed && "zoom_in"
+            isZoomed ? (isNormalZoom === true ? "zoom_in_half" : "zoom_in") : ""
           }`}
         >
           <svg
@@ -232,40 +391,41 @@ export default function Puzzle() {
                 InnerCmp={<InnerC2 />}
                 id="p1_card_2"
               />
-              {/* <g id="quest_1_card_2">
-                <path
-                  d="M1423 915L1175 915L1175 667L1423 667L1423 915Z"
-                  fill="#826F5E"
-                />
-                <path
-                  d="M1400 690L1400 892L1198 892L1198 690L1400 690Z"
-                  fill="#4A4139"
-                />
-                <path
-                  d="M1388 895L1399.26 914.5H1376.74L1388 895Z"
-                  fill="#E5E2E2"
-                />
-                <path
-                  d="M1212 895L1223.26 914.5H1200.74L1212 895Z"
-                  fill="#E5E2E2"
-                />
-                <path
-                  d="M1256 895L1267.26 914.5H1244.74L1256 895Z"
-                  fill="#E5E2E2"
-                />
-              </g> */}
 
               <UnfoldCards
-                number={puzzleWinStatus.total}
-                runAfterAnimation={unfoldCardsAnimationEndEventHandler}
+                number={unfoldCardRotationStatus}
+                runWhenAnimationStarts={unfoldCardsAnimationEndEventHandler}
               />
 
               <Quiz
                 step={puzzleOneSteps}
-                isPuzzleOneCardsAreMatching={isPuzzleOneCardsAreMatching}
-                runAfterPuzzleOneMatchFound={runAfterPuzzleOneMatchFound}
+                isPuzzleCardsAreMatching={isPuzzleOneCardsAreMatching}
+                runAfterPuzzleMatchFound={runAfterPuzzleOneMatchFound}
                 setDirectionStatus={puzzleOneCardHandler}
                 cards={[<CardOne />, <CardTwo />, <CardThree />]}
+                puzzleId="1"
+              />
+
+              <Quiz
+                step={puzzleTwoSteps}
+                isPuzzleCardsAreMatching={isPuzzleTwoCardsAreMatching}
+                runAfterPuzzleMatchFound={runAfterPuzzleTwoMatchFound}
+                setDirectionStatus={puzzleTwoCardHandler}
+                cards={[<CardFour />, <CardFive />, <CardSix />]}
+                puzzleId="2"
+              />
+              <Quiz
+                step={puzzleThreeSteps}
+                isPuzzleCardsAreMatching={isPuzzleThreeCardsAreMatching}
+                runAfterPuzzleMatchFound={runAfterPuzzleThreeMatchFound}
+                setDirectionStatus={puzzleThreeCardHandler}
+                cards={[
+                  <CardSeven />,
+                  <CardEight />,
+                  <CardNine />,
+                  <CardTen />,
+                ]}
+                puzzleId="3"
               />
 
               <g id="covers">

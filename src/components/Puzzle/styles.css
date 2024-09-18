@@ -12,6 +12,11 @@
 
 }
 
+.zoom_in_half {
+    transform: scale(1.8);
+
+}
+
 /* .unfold_cards {
     transform: rotate(0);
     transform-origin: center;

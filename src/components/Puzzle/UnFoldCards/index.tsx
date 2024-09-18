@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./styles.css";
 
 function generateClassName(number: number) {
@@ -21,10 +21,10 @@ function generateClassName(number: number) {
 
 export default function UnfoldCards({
   number = 1,
-  runAfterAnimation,
+  runWhenAnimationStarts,
 }: {
   number: number;
-  runAfterAnimation: () => void;
+  runWhenAnimationStarts: () => void;
 }) {
   //   const [count, setCount] = useState(0);
   const ref = useRef(null);
@@ -32,7 +32,7 @@ export default function UnfoldCards({
   useEffect(() => {
     if (!ref.current) return;
     const transitionStart = function (_event: TransitionEvent) {
-      runAfterAnimation();
+      runWhenAnimationStarts();
     };
     const cardsRing = ref.current as SVGElement;
     cardsRing.addEventListener("transitionstart", transitionStart);

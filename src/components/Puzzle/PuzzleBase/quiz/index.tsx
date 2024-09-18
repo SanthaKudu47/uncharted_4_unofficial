@@ -2,21 +2,23 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import CardWrapper from "../CardWrapper";
 
 import "./styles.css";
+import { cardIdType } from "../types";
 
 type Steps = "left" | "middle" | "right";
-
 export default function Quiz({
   step = "left",
-  isPuzzleOneCardsAreMatching = false,
-  runAfterPuzzleOneMatchFound,
+  isPuzzleCardsAreMatching = false,
+  runAfterPuzzleMatchFound: runAfterPuzzleOneMatchFound,
   setDirectionStatus,
   cards = [],
+  puzzleId = "1",
 }: {
   step: Steps;
-  isPuzzleOneCardsAreMatching: boolean;
-  runAfterPuzzleOneMatchFound: () => void;
-  setDirectionStatus: (cardId: "card1" | "card2" | "card3") => void;
+  isPuzzleCardsAreMatching: boolean;
+  runAfterPuzzleMatchFound: () => void;
+  setDirectionStatus: (cardId: cardIdType) => void;
   cards: ReactNode[];
+  puzzleId: string;
 }) {
   const [isPuzzleEnabled, setEnable] = useState(false);
   const stepClass =
@@ -27,16 +29,12 @@ export default function Quiz({
     if (!puzzle) return;
 
     const transitionendHandler = function () {
-      const ele = puzzle as SVGAElement;
-      const isClassContains = ele.classList.contains("after");
+      //const ele = puzzle as SVGAElement;
+      //const isClassContains = ele.classList.contains("after");
 
       if (step === "left") {
         setEnable(true);
       }
-
-      // if (isClassContains) {
-      //   allDoneCaller();
-      // }
     };
 
     puzzle.addEventListener("transitionend", transitionendHandler);
@@ -47,7 +45,11 @@ export default function Quiz({
 
   return (
     <>
-      <g id="p_One" className={`puzzle_wrapper ${stepClass}`} ref={ref}>
+      <g
+        id={`p_${puzzleId}`}
+        className={`puzzle_wrapper ${stepClass}`}
+        ref={ref}
+      >
         {cards.map((card, index) => {
           const cardId =
             index === 0
@@ -56,17 +58,21 @@ export default function Quiz({
               ? "card2"
               : index === 2
               ? "card3"
+              : index === 3
+              ? "card4"
               : "card1";
           return (
             <CardWrapper
+              puzzleCardName={`p_${puzzleId}_cards`}
               key={`index_${index}`}
               active={isPuzzleEnabled}
-              isPuzzleCardsAreMatching={isPuzzleOneCardsAreMatching}
+              isPuzzleCardsAreMatching={isPuzzleCardsAreMatching}
               runAfterPuzzleMatchFound={runAfterPuzzleOneMatchFound}
               setDirectionStatus={() => {
                 setDirectionStatus(cardId);
               }}
               card_position={`${index + 1}`}
+              puzzleId={puzzleId}
             >
               {card}
             </CardWrapper>

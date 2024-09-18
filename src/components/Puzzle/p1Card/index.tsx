@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./styles.css";
-import { puzzleOneCardAnimation } from "../helpers";
+import { puzzleCardsAnimation } from "../helpers";
 
 let isRotating = false;
 let timerRef: number | undefined = undefined;
@@ -69,7 +69,7 @@ function P1Card({
   }
 
   function animateCards() {
-    puzzleOneCardAnimation("p1_card");
+    puzzleCardsAnimation("p1_card", 1);
     isLastAnimationDone = true;
   }
 

@@ -1,4 +1,4 @@
-export default function CardFour() {
+export default function CardSix() {
   return (
     <>
       <g id="card6">

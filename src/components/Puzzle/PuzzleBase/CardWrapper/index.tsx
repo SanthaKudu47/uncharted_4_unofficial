@@ -1,13 +1,8 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
 import "./styles.css";
-import { puzzleTwoCardAnimation } from "../../helpers";
-
-let isPuzzleCardRotating = false;
-let puzzleTimerRef: number | undefined = undefined;
-let isLastAnimationDone = false;
-let isPuzzleCompleted = false;
-let isPuzzleCardsAreMatchingGlobal = false;
+import { puzzleCardsAnimation } from "../../helpers";
+import { globals } from "../../helpers/global";
 
 export default function CardWrapper({
   children,
@@ -16,6 +11,8 @@ export default function CardWrapper({
   runAfterPuzzleMatchFound,
   setDirectionStatus,
   card_position: card_position,
+  puzzleCardName = "1",
+  puzzleId = "1",
 }: {
   children: ReactNode;
   active: boolean;
@@ -23,8 +20,10 @@ export default function CardWrapper({
   runAfterPuzzleMatchFound: () => void;
   setDirectionStatus: () => void;
   card_position: string;
+  puzzleCardName: string;
+  puzzleId: string;
 }) {
-  isPuzzleCardsAreMatchingGlobal = isPuzzleCardsAreMatching;
+  globals[puzzleId].isPuzzleCardsAreMatchingGlobal = isPuzzleCardsAreMatching;
   const [rotatedAmount, setRotation] = useState(0);
   const cardRef = useRef<SVGAElement>(null);
   useEffect(() => {
@@ -38,17 +37,17 @@ export default function CardWrapper({
   }, []);
 
   function puzzleCardRotationEndHandler() {
-    isPuzzleCardRotating = false;
-    clearTimeout(puzzleTimerRef);
-    if (isLastAnimationDone) {
-      if (!isPuzzleCompleted) {
+    globals[puzzleId].isPuzzleCardRotating = false;
+    clearTimeout(globals[puzzleId].puzzleTimerRef);
+    if (globals[puzzleId].isLastAnimationDone) {
+      if (!globals[puzzleId].isPuzzleCompleted) {
         executeCallBackAfterWin();
       }
       return;
     }
-    puzzleTimerRef = setTimeout(() => {
-      clearTimeout(puzzleTimerRef);
-      if (isPuzzleCardsAreMatchingGlobal) {
+    globals[puzzleId].puzzleTimerRef = setTimeout(() => {
+      clearTimeout(globals[puzzleId].puzzleTimerRef);
+      if (globals[puzzleId].isPuzzleCardsAreMatchingGlobal) {
         animateCards();
       }
     }, 1500);
@@ -56,19 +55,19 @@ export default function CardWrapper({
 
   const cardDirectionHandler = function () {
     if (!active) return;
-    if (isLastAnimationDone) return;
-    if (isPuzzleCardRotating === true) return;
+    if (globals[puzzleId].isLastAnimationDone) return;
+    if (globals[puzzleId].isPuzzleCardRotating === true) return;
     setDirectionStatus();
     setRotation(rotatedAmount + 90);
-    isPuzzleCardRotating = true;
+    globals[puzzleId].isPuzzleCardRotating = true;
   };
 
   function animateCards() {
-    puzzleTwoCardAnimation("puzzle_card");
-    isLastAnimationDone = true;
+    puzzleCardsAnimation(puzzleCardName, 2);
+    globals[puzzleId].isLastAnimationDone = true;
   }
   function executeCallBackAfterWin() {
-    isPuzzleCompleted = true;
+    globals[puzzleId].isPuzzleCompleted = true;
     runAfterPuzzleMatchFound();
   }
 
@@ -77,7 +76,7 @@ export default function CardWrapper({
       data-card_position={card_position}
       ref={cardRef}
       onClick={cardDirectionHandler}
-      className="puzzle_card cursor-pointer"
+      className={`puzzle_card ${puzzleCardName} cursor-pointer`}
       style={{
         transform: `rotate(${rotatedAmount}deg) translateX(0px)`,
       }}

@@ -3,12 +3,12 @@ export default function CardFour() {
     <>
       <g id="card4">
         <g id="base_4">
-          <path d="M1557 1097V1345H1309V1097H1557Z" fill="#826F5E" />
-          <path d="M1332 1120H1534V1322H1332V1120Z" fill="#4A4139" />
+          <path d="M898 1097V1345H650V1097H898Z" fill="#826F5E" />
+          <path d="M673 1120H875V1322H673V1120Z" fill="#4A4139" />
         </g>
         <rect
-          id="img"
-          x="1333"
+          id="img_4"
+          x="674"
           y="1121"
           width="200"
           height="200"

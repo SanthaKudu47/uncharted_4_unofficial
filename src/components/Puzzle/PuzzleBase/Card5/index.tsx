@@ -1,14 +1,14 @@
-export default function CardFour() {
+export default function CardFive() {
   return (
     <>
       <g id="card5">
         <g id="base_5">
-          <path d="M1557 1097V1345H1309V1097H1557Z" fill="#826F5E" />
-          <path d="M1332 1120H1534V1322H1332V1120Z" fill="#4A4139" />
+        <path d="M1228 1097V1345H980V1097H1228Z" fill="#826F5E" />
+        <path d="M1003 1120H1205V1322H1003V1120Z" fill="#4A4139" />
         </g>
         <rect
-          id="img"
-          x="1333"
+          id="img_5"
+          x="1004"
           y="1121"
           width="200"
           height="200"
